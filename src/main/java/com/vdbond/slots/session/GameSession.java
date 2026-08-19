@@ -26,10 +26,6 @@ public class GameSession {
 
     private BigDecimal totalReturned = BigDecimal.ZERO;
 
-    public GameSession(GameConfig config) {
-        this(config, config.defaultBalance());
-    }
-
     public GameSession(GameConfig config, BigDecimal startingBalance) {
         this.config = config;
         this.spinner = new ReelSpinner();

@@ -23,12 +23,6 @@ class GameSessionTest {
     private static final BigDecimal BET = new BigDecimal("10.00");
 
     @Test
-    @DisplayName("a session given no balance of its own opens with the configured one")
-    void opensWithTheConfiguredBalance() {
-        assertAmount("500.00", new GameSession(everySpinWins()).getBalance());
-    }
-
-    @Test
     @DisplayName("a winning spin takes the bet, pays the win back, and counts both")
     void creditsAWinningSpin() {
         GameSession session = session(everySpinWins(), "100.00");

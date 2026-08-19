@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Optional;
 
 public class Main {
 
@@ -31,9 +30,7 @@ public class Main {
 
     private static void play(List<String> args) {
         GameConfig config = loadConfig();
-        GameSession session = startingBalance(args)
-                .map(balance -> new GameSession(config, balance))
-                .orElseGet(() -> new GameSession(config));
+        GameSession session = new GameSession(config, startingBalance(args, config));
         OutputRenderer renderer = new OutputRenderer(System.out, config);
         renderer.welcome(session.getBalance());
         renderer.help();
@@ -56,10 +53,10 @@ public class Main {
         }
     }
 
-    private static Optional<BigDecimal> startingBalance(List<String> args) {
+    private static BigDecimal startingBalance(List<String> args, GameConfig config) {
         int flag = args.indexOf(BALANCE_FLAG);
         if (flag < 0) {
-            return Optional.empty();
+            return config.defaultBalance();
         }
         if (flag + 1 == args.size()) {
             throw new IllegalArgumentException(
@@ -68,7 +65,7 @@ public class Main {
         }
         String amount = args.get(flag + 1);
         try {
-            return Optional.of(new BigDecimal(amount));
+            return new BigDecimal(amount);
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException(
                     "'%s' is not a balance I can read. Use plain digits, like %s 500".formatted(amount, BALANCE_FLAG)
